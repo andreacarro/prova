@@ -12,22 +12,22 @@
             margin: 0;
             padding: 0;
             height: 100%;
+            width: 100%;
             font-family: 'Georgia', serif;
             background-color: #e3d2b8;
             overflow: hidden;
         }
 
-        /* Sfondo principale */
-        .bg-container {
+        /* Immagine di sfondo visibile a tutto schermo */
+        .bg-img {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('1000316858_2.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
+            object-fit: contain;
+            object-position: center;
+            z-index: 1;
         }
 
         /* Player Audio Fisso in Basso */
@@ -249,8 +249,8 @@
 </head>
 <body>
 
-    <!-- Sfondo con l'illustrazione -->
-    <div class="bg-container"></div>
+    <!-- Immagine di Sfondo caricata direttamente nel DOM -->
+    <img src="1000316858_2.jpg" alt="Andrea Carro - L'Acrobata Bendato" class="bg-img">
 
     <!-- Player Audio Fisso in Basso -->
     <div class="audio-player-bar">
@@ -270,7 +270,7 @@
             <span class="time-display" id="durationTime">0:00</span>
         </div>
 
-        <!-- Pulsante aggiornato -->
+        <!-- Pulsante con il testo aggiornato -->
         <button class="ticket-icon-btn" id="openTicketBtn">
             🎟️ Ti piacciono queste canzoni?
         </button>
