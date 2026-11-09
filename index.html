@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Andrea Carro - L'Acrobata Bendato</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            color: #3a2518;
+            overflow-x: hidden;
+            background-color: #e8dcc4;
+        }
+
+        /* 1. Immagine di sfondo ridimensionata sulla pagina */
+        .bg-container {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            background: url('1000316858.jpg') no-repeat center center fixed;
+            background-size: contain;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            padding-bottom: 20px;
+        }
+
+        /* 2. Player MP3 nella parte bassa e centrale (spazio chiaro) */
+        .player-container {
+            width: 90%;
+            max-width: 520px;
+            background: rgba(245, 236, 217, 0.92);
+            border: 2px solid #8c3a27;
+            border-radius: 12px;
+            padding: 15px 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            text-align: center;
+            margin-bottom: 20px;
+            backdrop-filter: blur(3px);
+        }
+
+        .track-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #8c3a27;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        audio {
+            width: 100%;
+            height: 40px;
+            outline: none;
+            border-radius: 20px;
+        }
+
+        .player-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .btn-control {
+            background: #8c3a27;
+            color: #f5ecd9;
+            border: 1px solid #5c2417;
+            padding: 6px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .btn-control:hover {
+            background: #a64731;
+            transform: translateY(-1px);
+        }
+
+        /* 3. Bottone in basso a destra (bordo esterno) */
+        .btn-sostieni {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #8c3a27;
+            color: #f5ecd9;
+            border: 2px solid #f5ecd9;
+            padding: 12px 22px;
+            font-size: 1rem;
+            font-weight: bold;
+            font-family: inherit;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            z-index: 99;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-sostieni:hover {
+            background: #a64731;
+            transform: scale(1.05);
+        }
+
+        /* Box Form Pop-up Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-box {
+            position: relative;
+            background: #f5ecd9;
+            border: 3px solid #8c3a27;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 480px;
+            padding: 30px 25px 25px 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .btn-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #8c3a27;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .btn-close:hover {
+            color: #a64731;
+        }
+
+        .modal-header {
+            font-size: 0.95rem;
+            line-height: 1.4;
+            color: #3a2518;
+            margin-bottom: 20px;
+            text-align: center;
+            font-style: italic;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #8c3a27;
+            text-transform: uppercase;
+        }
+
+        .form-group input, 
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #c4b193;
+            border-radius: 6px;
+            background: #fffdf7;
+            font-family: inherit;
+            font-size: 0.95rem;
+            color: #3a2518;
+        }
+
+        .form-group textarea {
+            height: 90px;
+            resize: vertical;
+        }
+
+        .form-group input:focus, 
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #8c3a27;
+            box-shadow: 0 0 5px rgba(140, 58, 39, 0.3);
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: #8c3a27;
+            color: #f5ecd9;
+            border: none;
+            padding: 12px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            text-transform: uppercase;
+        }
+
+        .btn-submit:hover {
+            background: #a64731;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-container">
+        <!-- Player MP3 -->
+        <div class="player-container">
+            <div class="track-title" id="trackTitle">Caricamento traccia...</div>
+            <audio id="audioPlayer" controls></audio>
+            <div class="player-controls">
+                <button class="btn-control" onclick="prevTrack()">&laquo; Precedente</button>
+                <button class="btn-control" onclick="nextTrack()">Successiva &raquo;</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottone Sostieni il progetto -->
+    <button class="btn-sostieni" onclick="openModal()">Sostieni il progetto</button>
+
+    <!-- Modal Form per Crowdfunding -->
+    <div class="modal-overlay" id="formModal">
+        <div class="modal-box">
+            <button class="btn-close" onclick="closeModal()">&times;</button>
+            <div class="modal-header">
+                Unisciti al viaggio: lascia la mail e verrai avvisato in anteprima al lancio del crowdfunding, e se vorrai partecipare sarai artefice della nascita dell'album.
+            </div>
+            
+            <form action="https://formsubmit.co/acrobatabendato@gmail.com" method="POST">
+                <!-- Configurazione FormSubmit -->
+                <input type="hidden" name="_subject" value="adesione crowfinding acrobata bendato">
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_template" value="table">
+
+                <div class="form-group">
+                    <label for="email">Tua mail</label>
+                    <input type="email" id="email" name="tua_mail" placeholder="inserisci la tua email..." required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="commenti">Commenti</label>
+                    <textarea id="commenti" name="commenti" placeholder="scrivi un messaggio o un commento..."></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit">Invia</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Elenco dei 4 file MP3 allegati
+        const playlist = [
+            { title: "le tre vite", src: "le tre vite.mp3" },
+            { title: "Elementare", src: "Elementare.mp3" },
+            { title: "L'acrobata bendato", src: "L'acrobata bendato.mp3" },
+            { title: "il mostro", src: "il mostro.mp3" }
+        ];
+
+        let currentTrackIndex = 0;
+        const audioPlayer = document.getElementById('audioPlayer');
+        const trackTitle = document.getElementById('trackTitle');
+
+        function loadTrack(index) {
+            audioPlayer.src = playlist[index].src;
+            trackTitle.textContent = playlist[index].title;
+        }
+
+        function prevTrack() {
+            currentTrackIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length;
+            loadTrack(currentTrackIndex);
+            audioPlayer.play();
+        }
+
+        function nextTrack() {
+            currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+            loadTrack(currentTrackIndex);
+            audioPlayer.play();
+        }
+
+        // Passaggio automatico alla traccia successiva al termine del brano
+        audioPlayer.addEventListener('ended', nextTrack);
+
+        // Inizializza il player con la prima traccia
+        loadTrack(currentTrackIndex);
+
+        // Gestione Modal Form
+        function openModal() {
+            document.getElementById('formModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('formModal').style.display = 'none';
+        }
+
+        // Chiusura modal cliccando sullo sfondo esterno al box
+        window.onclick = function(event) {
+            const modal = document.getElementById('formModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+    </script>
+</body>
+</html>
